@@ -12,15 +12,33 @@ import java.util.List;
 public class Emoji
 {
   private final KeyValue _kv;
+  private List<Emoji> _skintones;
 
   protected Emoji(String bytecode)
   {
     this._kv = new KeyValue(bytecode, KeyValue.Kind.String, 0, 0);
+    this._skintones = new ArrayList<>();
+  }
+
+  protected Emoji(Emoji e)
+  {
+    this._kv = e.kv();
+    this._skintones = new ArrayList<>(e.skintones());
   }
 
   public KeyValue kv()
   {
     return _kv;
+  }
+
+  public List<Emoji> skintones()
+  {
+    return _skintones;
+  }
+
+  public void addSkintone(Emoji skintone)
+  {
+    _skintones.add(skintone);
   }
 
 
@@ -43,6 +61,7 @@ public class Emoji
       while (!(line = reader.readLine()).isEmpty())
       {
         Emoji e = new Emoji(line);
+
         _all.add(e);
         _stringMap.put(line, e);
       }
@@ -59,6 +78,23 @@ public class Emoji
           last = next;
         }
         _groups.add(_all.subList(last, _all.size()));
+      }
+
+      inputStream = res.openRawResource(R.raw.emojis_skintone_modifiable);
+      reader = new BufferedReader(new InputStreamReader(inputStream));
+
+      // Read skintone modifiable emojis
+      while ((line = reader.readLine()) != null)
+      {
+          int baseIndex = Integer.parseInt(line);
+          Emoji baseEmoji = _all.get(baseIndex);
+          
+          baseEmoji.addSkintone(new Emoji(baseEmoji));
+          
+          while (!(line = reader.readLine()).isEmpty())
+          {
+            baseEmoji.addSkintone(new Emoji(line));
+          }
       }
     }
     catch (IOException e) { Logs.exn("Emoji.init() failed", e); }
