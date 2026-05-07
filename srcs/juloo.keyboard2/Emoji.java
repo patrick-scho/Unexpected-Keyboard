@@ -20,12 +20,6 @@ public class Emoji
     this._skintones = new ArrayList<>();
   }
 
-  protected Emoji(Emoji e)
-  {
-    this._kv = e.kv();
-    this._skintones = new ArrayList<>(e.skintones());
-  }
-
   public KeyValue kv()
   {
     return _kv;
@@ -88,8 +82,6 @@ public class Emoji
       {
           int baseIndex = Integer.parseInt(line);
           Emoji baseEmoji = _all.get(baseIndex);
-          
-          baseEmoji.addSkintone(new Emoji(baseEmoji));
           
           while (!(line = reader.readLine()).isEmpty())
           {

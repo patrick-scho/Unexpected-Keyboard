@@ -44,7 +44,7 @@ for line in getEmojiTestContents().splitlines():
             # if the list is empty, or the last entry doesnt begin with the index we are currently at
             if len(emoji_skintone_modifiable_list) == 0 or emoji_skintone_modifiable_list[-1][0] != len(emoji_list)-1:
                 # create a new list with the index
-                emoji_skintone_modifiable_list.append([len(emoji_list)-1])
+                emoji_skintone_modifiable_list.append([len(emoji_list)-1, emoji_list[-1]])
             # add the current skintone to the newest list
             emoji_skintone_modifiable_list[-1].append(emoji)        
         else:
